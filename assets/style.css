@@ -1,0 +1,36 @@
+
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inconsolata', monospace, 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 16px;
+}
+.lead{
+  color: whitesmoke;
+  font-size: 24px;
+  border-top: 4px double wheat;
+}
+th, .jumbotron, .btn-edit{
+  background-color:rgb(101, 61, 2);
+  color: whitesmoke;
+}
+
+.panel-heading{
+  background-color: rgb(3, 3, 83);
+  color: wheat;
+  padding: 15px;
+  font-size: 20px;
+
+}
+.panel-body{
+  padding: 5px;
+  border: 3px solid rgb(22, 22, 82);
+  margin-bottom: 5px;
+}
+
+tr:hover td{
+  background-color: rgb(74, 74, 222);
+  color: wheat;
+ 
+
+}
