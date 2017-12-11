@@ -29,8 +29,8 @@ th, .jumbotron, .btn-edit{
 }
 
 tr:hover td{
-  background-color: rgb(74, 74, 222);
-  color: wheat;
+  background-color: wheat;
+  color: rgb(3, 3, 83);
  
 
 }
