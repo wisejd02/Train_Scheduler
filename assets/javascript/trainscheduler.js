@@ -29,7 +29,7 @@
          var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("HH:mm");
          
          $("tbody").append(`
-             <tr id="${response.key}">
+             <tr scope="row" id="${response.key}">
                 <td><button id="btn_${response.key}_upd" class="btn btn-edit" onclick="updateRow(this)">Edit</button>
                 <button id="btn_${response.key}_del" class="btn btn-edit" onclick="deleteRow(this)">Delete</button></td>
                 <td>${response.val().trainName}</td>

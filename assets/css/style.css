@@ -13,6 +13,7 @@
 th, .jumbotron, .btn-edit{
   background-color:rgb(101, 61, 2);
   color: whitesmoke;
+  margin-bottom: 3px;
 }
 
 .panel-heading{
