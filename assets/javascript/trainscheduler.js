@@ -42,10 +42,11 @@
      });
      function updateRow(obj){
         var currentRow = $(obj).parents('tr')[0].id;
-        if ($(obj).html() == 'Edit') {
+        if ($(obj).html() == 'Edit') {           
             $('#'+currentRow).each(function() {
                 $.each(this.cells, function(index, val){
                     if(index != 0 && index <5){
+                        $(this).prop('class','editRow');
                         $(this).prop('contenteditable', true)
                     }
                     
@@ -55,6 +56,7 @@
         }else {
             $('#'+currentRow).each(function() {
                 $.each(this.cells, function () {
+                    $(this).removeClass('editRow');
                     $(this).prop('contenteditable', false)
                 });
             });
@@ -101,11 +103,6 @@
             $("#alert").remove();
             $("#frmTrain").prepend("<div id='alert'>Please fill out all fields</div>");
         }
-         // database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
-         // 	var sv = snapshot.val();
-
-
-         // });
      });
      
      function updateTrain(obj){
