@@ -13,7 +13,7 @@
      fbUpdate();
     function fbUpdate(){
         $("tr:gt(0)").remove();
-    //update table on new item added in firebase 
+        //update table on new item added in firebase 
         database.ref("train_schedule").orderByChild("dateAdded").on("child_added", function(response) {
             drawTable(response);
         });
