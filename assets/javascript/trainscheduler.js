@@ -80,18 +80,27 @@
 
      $("#btnFrmSubmit").click( function(e){
          e.preventDefault();
-         var formData = {
-             trainName: $("#trainName").val().trim(),
-             trainDest: $("#trainDest").val().trim(),
-             firstTrain: moment($("#firstTrain").val().trim(), "HHmm").format("HH:mm"),
-             trainFreq: $("#trainFreq").val().trim(),
-             dateAdded: firebase.database.ServerValue.TIMESTAMP
-         };
-         updateTrain(formData);
-         var formEntry = $(".form-control");
-         $.each(formEntry, function( index, value ) {
-            $("#"+formEntry[index].id).val("");
-         });
+         var empty = $(this).parent().find("input").filter(function() {
+            return this.value === "";
+        });
+        if(empty.length == 0 ){
+            $("#alert").remove();
+            var formData = {
+                trainName: $("#trainName").val().trim(),
+                trainDest: $("#trainDest").val().trim(),
+                firstTrain: moment($("#firstTrain").val().trim(), "HHmm").format("HH:mm"),
+                trainFreq: $("#trainFreq").val().trim(),
+                dateAdded: firebase.database.ServerValue.TIMESTAMP
+            };
+            updateTrain(formData);
+            var formEntry = $(".form-control");
+            $.each(formEntry, function( index, value ) {
+                $("#"+formEntry[index].id).val("");
+            });
+        }else{
+            $("#alert").remove();
+            $("#frmTrain").prepend("<div id='alert'>Please fill out all fields</div>");
+        }
          // database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
          // 	var sv = snapshot.val();
 

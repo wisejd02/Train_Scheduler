@@ -44,7 +44,7 @@
 		<div class="panel panel-primary">
 				<div class="panel-heading">Add Train</div>
 				<div class="panel-body">
-					<form>
+					<form id="frmTrain">
 						<div class="form-group">
 							<label for="trainName">Train Name</label>
 							<input type="text" class="form-control" id="trainName" placeholder="Enter Train Name Here">
@@ -55,11 +55,11 @@
 						</div>
 						<div class="form-group">
 							<label for="firstTrain">First Train</label>
-							<input type="text" class="form-control" id="firstTrain" placeholder="Enter First Train Time Here (HrMin)">
+							<input type="time" class="form-control" id="firstTrain" placeholder="Enter First Train Time Here ie 2330">
 						</div>
 						<div class="form-group">
 							<label for="trainFreq">Frequency</label>
-							<input type="text" class="form-control" id="trainFreq" placeholder="Enter Freq In Mins Here">
+							<input type="number" class="form-control" id="trainFreq" placeholder="Enter Freq In Mins Here">
 						</div>
 						<button id="btnFrmSubmit" class="btn btn-primary">Submit</button>
 					</form>
