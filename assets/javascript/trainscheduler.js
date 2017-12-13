@@ -9,37 +9,52 @@
      };
      firebase.initializeApp(config);
      var database = firebase.database();
-     var trainName = "";
-     var trainDest = "";
-     var trainFreq = "";
-     var trainFreq = "";
 
-     database.ref("train_schedule").orderByChild("dateAdded").on("child_added", function(response) {
-         var tFrequency = response.val().trainFreq;
-         var firstTimeConverted = moment(response.val().firstTrain, "hh:mm").subtract(1, "years");
-         // Current Time
-         var currentTime = moment();
-         // Difference between the times
-         var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-         // Time apart (remainder)
-         var tRemainder = diffTime % tFrequency;
-         // Minute Until Train
-         var tMinutesTillTrain = tFrequency - tRemainder;
-         // Next Train
-         var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("HH:mm");
-         
-         $("tbody").append(`
-             <tr scope="row" id="${response.key}">
-                <td><button id="btn_${response.key}_upd" class="btn btn-edit" onclick="updateRow(this)">Edit</button>
-                <button id="btn_${response.key}_del" class="btn btn-edit" onclick="deleteRow(this)">Delete</button></td>
-                <td>${response.val().trainName}</td>
-                <td>${response.val().trainDest}</td>
-                <td>${response.val().firstTrain}</td>
-                <td>${response.val().trainFreq}</td>
-                <td>${nextTrain}</td>
-                <td>${tMinutesTillTrain}</td>
-             </tr>`)
-     });
+     fbUpdate();
+    function fbUpdate(){
+        $("tr:gt(0)").remove();
+    //update table on new item added in firebase 
+        database.ref("train_schedule").orderByChild("dateAdded").on("child_added", function(response) {
+            drawTable(response);
+        });
+    }
+     function calcTime(tFrequency, firstTrain ){
+        var firstTimeConverted = moment(firstTrain, "hh:mm").subtract(1, "years");
+        // Current Time
+        var currentTime = moment();
+        // Difference between the times
+        var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+        // Time apart (remainder)
+        var tRemainder = diffTime % tFrequency;
+
+        //object contains
+        // Next Train
+        // Minute Until next Train
+        var trainTime = {
+            nextTrain: moment().add(tFrequency - tRemainder, "minutes").format("HH:mm"),
+            tMinutesTillTrain: tFrequency - tRemainder
+        };
+        return trainTime;
+     }
+
+
+     
+     function drawTable(response){
+        var trainTime = calcTime(response.val().trainFreq, response.val().firstTrain);
+        $("tbody").append(`
+        <tr scope="row" id="${response.key}" >
+           <td><button id="btn_${response.key}_upd" class="btn btn-edit" onclick="updateRow(this)">Edit</button>
+           <button id="btn_${response.key}_del" class="btn btn-edit" onclick="deleteRow(this)">Delete</button></td>
+           <td>${response.val().trainName}</td>
+           <td>${response.val().trainDest}</td>
+           <td>${response.val().firstTrain}</td>
+           <td>${response.val().trainFreq}</td>
+           <td>${trainTime.nextTrain}</td>
+           <td>${trainTime.tMinutesTillTrain}</td>
+        </tr>`)
+     }
+
+//inline row update for train 
      function updateRow(obj){
         var currentRow = $(obj).parents('tr')[0].id;
         if ($(obj).html() == 'Edit') {           
@@ -68,18 +83,24 @@
                 trainFreq: $(obj).parents('tr')[0].cells[4].innerHTML.trim(),
                 dateAdded: firebase.database.ServerValue.TIMESTAMP
             }
-            database.ref("train_schedule/"+dbUID).set(updateTrainData);
 
+            //push change up to firebase
+            database.ref("train_schedule/"+dbUID).set(updateTrainData);
+            
+            //update table on change in firebase
+            fbUpdate();
         }
         $(obj).html($(obj).html() == 'Edit' ? 'Save' : 'Edit')
     };
 
+    //delete train 
     function deleteRow(obj){
         var dbUID = $(obj).parents('tr')[0].id;
         $(obj).parents('tr')[0].remove()
         database.ref("train_schedule/"+dbUID).remove()
     };
 
+    //add new train
      $("#btnFrmSubmit").click( function(e){
          e.preventDefault();
          var empty = $(this).parent().find("input").filter(function() {
@@ -103,8 +124,11 @@
             $("#alert").remove();
             $("#frmTrain").prepend("<div id='alert'>Please fill out all fields</div>");
         }
+        $("tr:gt(0)").remove();
+        fbUpdate();
      });
      
+     //update train
      function updateTrain(obj){
         database.ref("train_schedule").push(obj);
 
